@@ -1,18 +1,19 @@
 //Stanley weather monster thingy
-//gradient 
+
+//gradient backdrop 
 
 var colorSelect;
 let c1, c2;
 
-//monster var
+//monster variables 
 var w = window.innerWidth, h = window.innerHeight;
 
 var r = (w < h)?w/7:h/7; //  creature size
 var x_off = 1000,y_off = 1000,z_off = 1000;
 var vertices_amount = 100;
 
-var px_offset = r/1;    // amplitude
-var NOISE_SCALE = 200;  // softness
+var px_offset = r/1;    // amplitude of curves
+var NOISE_SCALE = 200;  // softness of curves 
 
 var Z_SPEED = .007; // noise change per frame
 
@@ -47,26 +48,29 @@ var drop = []
 function setup() {
   createCanvas(1920, 1080);
 
-  colorSelect = [color('red'), color('green'), color('blue')];
+  colorSelect = [color('red'), color('green'), color('blue')]; //colour array 
 
   setInterval(countdown, 1000); 
 
-  face = loadImage('Face.png');
+  //Images
+  face = loadImage('Face.png'); 
   img = loadImage('temp.png');
 
   frameRate(50);
-  color_x = (360);
+  color_x = (360); //colour changer 
 
-  imageLocation = createVector(width/2, height/2); 
-  imageLocation2 = createVector(width/2, height/2); 
+  imageLocation = createVector(width/2, height/2); //body tracking
+  imageLocation2 = createVector(width/2, height/2); //face tracking 
 
-  for(var i = 0; i < 200; i++) {
+  for(var i = 0; i < 200; i++) { //droplet creation 
     drop[i] = new Drop();
 }
 }
 
 
 function countdown(){
+
+//API data 
   let m = month();
   let d = day();
   counter--; 
@@ -105,11 +109,13 @@ function Drop() {
     this.rainY = random(0, -height);
     
     this.show = function() {
+        //aspects of the raindrops 
       noStroke();
       fill(colorSelect[2]);
-      ellipse(this.rainX, this.rainY, random(5), random(15));   
+      ellipse(this.rainX, this.rainY, random(5), random(15));  //position, shape/size of drops
     }
     this.update = function() {
+        //rain fall aspects
       this.speed = random(5, 10);
       this.gravity = 1.01;
       this.rainY = this.rainY + this.speed*this.gravity;  
@@ -124,7 +130,7 @@ function Drop() {
 
 function draw() {
 
-    //body track
+    //body tracking variables 
 
     var target = createVector(mouseX, mouseY);
 
@@ -137,7 +143,7 @@ function draw() {
     
     imageLocation.add(target);
 
-    //face track\
+    //face track variables 
 
     var target2 = createVector(mouseX, mouseY);
 
@@ -154,6 +160,7 @@ function draw() {
 c1 = color(255);
 c2 = color(63, 191, 191);
 
+//smoothness between colours 
   for(let y=0; y<height; y++){
       n = map(y, 0, height, 0, 1);
       let newc = lerpColor(c1, c2, n);
@@ -171,6 +178,7 @@ colorMode(HSB);
   noStroke();
   fill(color_x,255,255);
   
+  //points of sphere alogside 
   beginShape();
 
   for (var a=0; a<TWO_PI;a+=TWO_PI/vertices_amount) {
@@ -197,9 +205,6 @@ colorMode(HSB);
   //face
   imageMode(CENTER);
     image(face, imageLocation2.x, imageLocation2.y, 75, 75);
-
-  //imageMode(CENTER);
-  //image(face, pmouseX, pmouseY, 75, 75);
 
   // NOISE offsets
   z_off += Z_SPEED;
@@ -228,7 +233,7 @@ colorMode(HSB);
   noStroke();
   ellipse(width/2, 0, 200, 200);
 
-  
+  //weather info displayal 
   if(weatherjson===false) return;
 
   
